@@ -2,6 +2,7 @@ import './App.css';
 import ParticleCanvas from './components/ParticleCanvas';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import Competences from './components/Competences';
 import Experience from './components/Experience';
 import Education from './components/Education';
 import Demos from './components/Demos';
@@ -14,6 +15,7 @@ const App = () => (
     <Navbar />
     <div className="max-w-[1100px] mx-auto px-5 sm:px-8">
       <Hero />
+      <Competences />
       <Experience />
       <Education />
       <Demos />
