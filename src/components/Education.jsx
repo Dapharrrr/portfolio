@@ -13,7 +13,7 @@ const Education = () => (
       </Card>
       <Card>
         <div className="relative z-10">
-          <h3 className="text-2xl mb-2 font-semibold text-[#f5f5f7]">Bachelor Concepteur Développeur</h3>
+          <h3 className="text-2xl mb-2 font-semibold text-[#f5f5f7]">Bachelor Concepteur Développeur D&apos;applications</h3>
           <span className="text-[#2997ff] text-sm mb-6 block">2024 — 2025</span>
           <p className="text-[#86868b] text-base">MyDigitalSchool — Paris<br />Titre Professionnel RNCP Niv 6</p>
         </div>
