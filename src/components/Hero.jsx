@@ -27,12 +27,12 @@ const Hero = () => {
         </h1>
 
         <h2 className="text-[clamp(1.5rem,3vw,2rem)] font-normal text-[#f5f5f7] mb-8">
-          Développeur Web Full Stack
+          Développeur Web Full Stack en apprentissage
         </h2>
 
         <div className="max-w-xl text-[#86868b] text-[1.1rem] leading-relaxed space-y-4">
           <p>
-            Passionné par la création d'interfaces fluides et d'architectures robustes, je conçois des applications web modernes en alliant performance et design soigné.
+            Passionné par la création d'interfaces fluides et d'architectures robustes, je conçois des applications web et mobile modernes.
           </p>
           <p>
             Actuellement en formation, je suis à la recherche d'une alternance de 12 mois à partir de septembre 2026 pour mettre mes compétences au service d'une équipe ambitieuse.
