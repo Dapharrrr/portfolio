@@ -14,31 +14,36 @@ const Experience = () => (
       <Card>
         <div className={content}>
           <h3 className={cardTitle}>Sakado</h3>
-          <span className={cardDate}>Déc 2025 — Présent</span>
-          <p className={cardText}><strong className="text-[#f5f5f7]">Projet entrepreneurial</strong> — Développement d&apos;un MVP pour valider le concept.</p>
-          <p className={cardText}>Conception et développement d&apos;une application mobile en React Native.</p>
+          <span className={cardDate}>Déc 2025 — Présent • Projet entrepreneurial</span>
+          <p className={cardText}>Réalisation d&apos;un MVP axé sur l&apos;expérience utilisateur dans le cadre d&apos;un programme école.</p>
+          <p className={cardText}>Architecture et développement d&apos;une application mobile cross-platform avec React Native.</p>
         </div>
       </Card>
       <Card>
         <div className={content}>
-          <h3 className={cardTitle}>MY-SERIOUS-GAME</h3>
-          <span className={cardDate}>Sept 2024 — Présent (Alternance)</span>
+          <h3 className={cardTitle}>AUGMANTED</h3>
+          <span className={cardDate}>Sept 2025 — Présent • Alternance</span>
           <p className={cardText}><strong className="text-[#f5f5f7]">Service Informatique</strong></p>
-          <p className={cardText}>Maintenance et amélioration des applications internes. Contribution à une app TapToEarn.</p>
+          <p className={cardText}>Maintenance applicative : assurer la pérennité des applications internes.</p>
+          <p className={cardText}>Optimisation logicielle : poursuite du développement et amélioration de l&apos;application métier initiée durant mon stage.</p>
         </div>
       </Card>
       <Card>
         <div className={content}>
           <h3 className={cardTitle}>MY-SERIOUS-GAME</h3>
-          <span className={cardDate}>Avril — Juillet 2024 (Stage)</span>
-          <p className={cardText}>Création d&apos;une application web interne en React pour personnaliser des personnages 2D à partir de leurs assets. Git.</p>
+          <span className={cardDate}>Sept 2024 — Août 2025 • Alternance</span>
+          <p className={cardText}><strong className="text-[#f5f5f7]">Service Informatique</strong></p>
+          <p className={cardText}>Développement de mécaniques de jeu pour une application Tap-to-Earn.</p>
+          <p className={cardText}>Création d&apos;un starter web &quot;out-of-the-box&quot; pour faciliter le déploiement de nouveaux projets.</p>
         </div>
       </Card>
       <Card>
         <div className={content}>
-          <h3 className={cardTitle}>PORTE 7 (Agence Web)</h3>
-          <span className={cardDate}>Avril — Juin 2023 (Stage)</span>
-          <p className={cardText}>Apprentissage de React, Git/GitHub. Extraction de données via API et création d&apos;une app interne de carte de visite.</p>
+          <h3 className={cardTitle}>MY-SERIOUS-GAME</h3>
+          <span className={cardDate}>Avril — Juillet 2024 • Stage</span>
+          <p className={cardText}><strong className="text-[#f5f5f7]">Service Informatique</strong></p>
+          <p className={cardText}>Création d&apos;une application web dédiée à la personnalisation de personnages 2D à partir d&apos;une bibliothèque d&apos;assets.</p>
+          <p className={cardText}>Conception d&apos;interfaces dynamiques avec React et gestion de version avec Git.</p>
         </div>
       </Card>
     </div>
