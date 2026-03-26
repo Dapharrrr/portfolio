@@ -57,6 +57,19 @@ const Demos = () => {
             <p className="text-[#86868b] text-base">Conception d&apos;un espace de travail unifié et modulaire. Ce projet combine une architecture cœur robuste (authentification, base de données centralisée) avec un tableau de bord hautement personnalisable. L&apos;objectif est de permettre à l&apos;utilisateur de greffer et d&apos;organiser différentes mini-applications (gestionnaire de tâches, notes, flux d&apos;API externes) sur une seule interface fluide.</p>
           </div>
         </Card>
+        <Card>
+          <div className="relative z-10 flex flex-col h-full">
+            <div className="w-full aspect-video bg-black/50 rounded-xl mb-6 border border-white/[0.08] flex gap-2 items-center justify-center text-[#86868b]/50 text-sm cursor-not-allowed" title="Vidéo non disponible pour le moment">
+              <svg className="w-8 h-8 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+              <span>Vidéo non disponible</span>
+            </div>
+            <div className="flex items-center gap-3 mb-2">
+              <h3 className="text-2xl font-semibold text-[#f5f5f7]">Soft Skills Families</h3>
+              <span className="px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-300 text-xs font-medium border border-orange-500/20">En cours</span>
+            </div>
+            <p className="text-[#86868b] text-base">Jeu de cartes physique en anglais inspiré des 7 familles, centré sur les soft skills. Les joueurs jouent avec de vraies cartes, et lorsqu'une famille est complétée, l'application web prend le relais : elle affiche une question bonus, et accorde un pouvoir spécial en cas de bonne réponse.</p>
+          </div>
+        </Card>
       </div>
 
       {activeVideo && (
