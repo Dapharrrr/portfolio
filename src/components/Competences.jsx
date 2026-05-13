@@ -9,19 +9,21 @@ import {
   FaReact, 
   FaNodeJs 
 } from 'react-icons/fa';
-import { 
-  SiNextdotjs, 
-  SiTypescript, 
-  SiMongodb, 
-  SiPostgresql, 
-  SiGraphql 
+import {
+  SiNextdotjs,
+  SiTypescript,
+  SiMongodb,
+  SiPostgresql,
+  SiGraphql,
+  SiNestjs
 } from 'react-icons/si';
 
 const HARD_SKILLS = [
   { name: 'React', icon: <FaReact size={20} /> },
   { name: 'Next.js', icon: <SiNextdotjs size={20} /> },
   { name: 'TypeScript', icon: <SiTypescript size={20} /> },
-  { name: 'Node.js (Nest.js)', icon: <FaNodeJs size={20} /> },
+  { name: 'Node.js', icon: <FaNodeJs size={20} /> },
+  { name: 'Nest.js', icon: <SiNestjs size={20} /> },
   { name: 'MongoDB', icon: <SiMongodb size={20} /> },
   { name: 'PostgreSQL', icon: <SiPostgresql size={20} /> },
   { name: 'GraphQL', icon: <SiGraphql size={20} /> },

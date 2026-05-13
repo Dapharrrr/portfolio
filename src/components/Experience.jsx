@@ -1,7 +1,7 @@
 import Card from './Card';
 
 const sectionTitle = 'text-[2.5rem] font-semibold mb-12 tracking-[-0.03em] text-center text-[#f5f5f7]';
-const grid = 'grid grid-cols-1 md:grid-cols-2 gap-8';
+const grid = 'grid grid-cols-1 md:grid-cols-3 gap-8';
 const content = 'relative z-10';
 const cardTitle = 'text-2xl mb-2 font-semibold text-[#f5f5f7]';
 const cardDate = 'text-[#2997ff] text-sm mb-6 block';
@@ -11,14 +11,6 @@ const Experience = () => (
   <section id="experience" className="py-24">
     <h2 className={sectionTitle}>Expérience Professionnelle</h2>
     <div className={grid}>
-      <Card>
-        <div className={content}>
-          <h3 className={cardTitle}>Sakado</h3>
-          <span className={cardDate}>Déc 2025 — Présent • Projet entrepreneurial</span>
-          <p className={cardText}>Réalisation d&apos;un MVP axé sur l&apos;expérience utilisateur dans le cadre d&apos;un programme école.</p>
-          <p className={cardText}>Architecture et développement d&apos;une application mobile cross-platform avec React Native.</p>
-        </div>
-      </Card>
       <Card>
         <div className={content}>
           <h3 className={cardTitle}>AUGMANTED</h3>
@@ -47,6 +39,16 @@ const Experience = () => (
         </div>
       </Card>
     </div>
+
+    <h3 className="text-sm text-[#86868b] uppercase tracking-[3px] font-semibold mt-16 mb-8 text-center">Projet Entrepreneurial</h3>
+    <Card>
+      <div className={content}>
+        <h3 className={cardTitle}>Sakado</h3>
+        <span className={cardDate}>Déc 2025 — Présent • Programme école</span>
+        <p className={cardText}>Réalisation d&apos;un MVP axé sur l&apos;expérience utilisateur dans le cadre d&apos;un programme d&apos;école.</p>
+        <p className={cardText}>Architecture et développement d&apos;une application mobile cross-platform avec React Native.</p>
+      </div>
+    </Card>
   </section>
 );
 
