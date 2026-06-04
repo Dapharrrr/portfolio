@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import Card from './Card';
-import sakadoVideo from '../assets/sakado.mp4';
 import somebuddyVideo from '../assets/somebuddy.mp4';
+
+const sakadoVideo = 'https://github.com/Dapharrrr/portfolio/releases/download/untagged-4bfa484abdd7cff048ba/sakadoV2.mp4';
 
 const VideoPreview = ({ src, onClick, portrait = false }) => (
   <div
