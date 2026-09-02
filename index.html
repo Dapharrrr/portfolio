@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="" />
@@ -7,9 +7,23 @@
     <title>Raphaël Dubost - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/portfolio/assets/index-C8IqBRgO.js"></script>
-    <link rel="stylesheet" crossorigin href="/portfolio/assets/index-vVY5Y6hw.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Nunito:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var system = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', stored || system);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/portfolio/assets/index-DwXmIYib.js"></script>
+    <link rel="stylesheet" crossorigin href="/portfolio/assets/index-Do-od5Iz.css">
   </head>
   <body>
     <div id="root"></div>
