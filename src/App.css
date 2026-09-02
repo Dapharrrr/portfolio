@@ -1,31 +1,97 @@
-/* Canvas background */
+/* Nappe lumineuse : c'est elle qui donne la profondeur, sous les courbes */
+#bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: var(--t-bg-glow);
+  pointer-events: none;
+}
+
+/* Fond animé : courbes de niveau, estompées vers le bas pour alléger la page */
 #bg-canvas {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   z-index: -1;
   pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.45) 38%, transparent 78%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.45) 38%, transparent 78%);
 }
 
-/* Gradient heading */
+/* Entrée du Hero : les lignes du nom montent derrière un masque, le reste
+   remonte en fondu, le métier se compose lettre par lettre. */
+@keyframes hero-rise {
+  from { transform: translateY(105%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-letter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.anim-rise { animation: hero-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.anim-fade-up { animation: hero-fade-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.anim-letter { animation: hero-letter 0.5s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-rise,
+  .anim-fade-up,
+  .anim-letter {
+    animation: none;
+  }
+}
+
+/* Titre du Hero : dégradé encre → bleu, valable dans les deux thèmes */
 .gradient-text {
-  background: linear-gradient(180deg, #fff, #86868b);
+  background: linear-gradient(170deg, var(--t-ink) 20%, var(--t-accent));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Card spotlight pseudo-elements */
+/* Filet de section : part de l'accent et se dissout, moins présent qu'un trait plein */
+.rule {
+  height: 2px;
+  border: 0;
+  background: linear-gradient(90deg, var(--t-accent), transparent 62%);
+  opacity: 0.5;
+}
+
+/* Volume : surface dégradée, liseré de lumière en haut, ombre en couches.
+   Partagé par les cartes, les pastilles de compétences et la barre de nav. */
+.surface-raised {
+  background: var(--t-card-bg);
+  box-shadow: var(--t-card-shadow), inset 0 1px 0 var(--t-card-edge);
+}
+
+.card {
+  background: var(--t-card-bg);
+  box-shadow: var(--t-card-shadow), inset 0 1px 0 var(--t-card-edge);
+  transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+}
+
+.card:hover {
+  box-shadow: var(--t-card-shadow-hover), inset 0 1px 0 var(--t-card-edge);
+}
+
+/* Reflet qui suit le curseur, piloté par --mouse-x / --mouse-y depuis Card.jsx */
 .card::before {
   content: "";
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.06), transparent 40%);
+  background: radial-gradient(340px circle at var(--mouse-x, 50%) var(--mouse-y, 0), var(--t-spotlight-near), transparent 60%);
   z-index: 0;
   opacity: 0;
-  transition: opacity 0.5s;
+  transition: opacity 0.4s;
   pointer-events: none;
+  mix-blend-mode: soft-light;
 }
 
 .card::after {
@@ -33,13 +99,32 @@
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: radial-gradient(400px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.4), transparent 40%);
+  background: radial-gradient(520px circle at var(--mouse-x, 50%) var(--mouse-y, 0), var(--t-spotlight-far), transparent 55%);
   z-index: -1;
   opacity: 0;
-  transition: opacity 0.5s;
+  transition: opacity 0.4s;
 }
 
 .card:hover::before,
 .card:hover::after {
   opacity: 1;
+}
+
+/* Impression : on ne garde que le document */
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  #bg-canvas,
+  #bg-glow,
+  .no-print {
+    display: none !important;
+  }
 }

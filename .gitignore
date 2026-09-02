@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 CLAUDE.md
+# Served from a GitHub release, too large for the repo
+src/assets/sakadoV2.mp4

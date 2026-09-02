@@ -1,4 +1,19 @@
-import Profil from '../assets/Raphael-D.jpg';
+import Profil from '../assets/Raphael-D-960.jpg';
+
+const TITLE = 'Développeur Web Full Stack';
+const LETTER_START = 520; // ms : le métier se compose après les deux lignes du nom
+const LETTER_STEP = 26;
+
+/** Découpe le métier en mots (pour ne pas casser le retour à la ligne) puis en lettres. */
+const buildTitle = () => {
+  let index = 0;
+  return TITLE.split(' ').map((word) => ({
+    word,
+    letters: [...word].map((char) => ({ char, delay: LETTER_START + index++ * LETTER_STEP })),
+  }));
+};
+
+const TITLE_WORDS = buildTitle();
 
 const Hero = () => {
   const handleMouseMove = (e) => {
@@ -18,44 +33,69 @@ const Hero = () => {
     <header id='a-propos' className="min-h-screen flex flex-col-reverse justify-center gap-10 pt-24 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
 
       <div className="flex-1 min-w-0 flex flex-col items-start text-left">
-        <div className="inline-block py-2 px-4 bg-[#2997ff]/10 text-[#2997ff] rounded-[20px] text-sm font-semibold tracking-[0.5px] mb-8 border border-[#2997ff]/20">
+        <div className="anim-fade-up inline-block py-2 px-4 bg-accent/10 text-accent rounded-[20px] text-sm font-semibold tracking-[0.5px] mb-8 border border-accent/20">
           Recherche d&apos;alternance (12 mois) — Sept 2026
         </div>
 
-        <h1 className="gradient-text text-[clamp(3rem,8vw,5.5rem)] font-bold tracking-[-0.05em] leading-[1.1] mb-2">
-          Raphaël<br />Dubost.
+        <h1 className="gradient-text font-display text-[clamp(2.75rem,7vw,4.75rem)] leading-[1.12] mb-3">
+          <span className="block overflow-hidden pb-[0.06em]">
+            <span className="anim-rise block" style={{ animationDelay: '120ms' }}>Raphaël</span>
+          </span>
+          <span className="block overflow-hidden pb-[0.06em]">
+            <span className="anim-rise block" style={{ animationDelay: '260ms' }}>Dubost.</span>
+          </span>
         </h1>
 
-        <h2 className="text-[clamp(1.5rem,3vw,2rem)] font-normal text-[#f5f5f7] mb-8">
-          Développeur Web Full Stack en apprentissage
+        <h2
+          className="text-[clamp(1.25rem,2.6vw,1.75rem)] uppercase tracking-[0.14em] font-semibold text-accent mb-8"
+          aria-label={TITLE}
+        >
+          {TITLE_WORDS.map(({ word, letters }, wordIndex) => (
+            <span key={word} className="inline-block whitespace-nowrap" aria-hidden="true">
+              {letters.map(({ char, delay }, i) => (
+                <span
+                  key={`${char}-${i}`}
+                  className="anim-letter inline-block"
+                  style={{ animationDelay: `${delay}ms` }}
+                >
+                  {char}
+                </span>
+              ))}
+              {wordIndex < TITLE_WORDS.length - 1 ? ' ' : ''}
+            </span>
+          ))}
         </h2>
 
-        <div className="max-w-xl text-[#86868b] text-[1.1rem] leading-relaxed space-y-4">
-          <p>
-            Passionné par la création d'interfaces fluides et d'architectures robustes, je conçois des applications web et mobile modernes.
-          </p>
-          <p>
-            Actuellement en formation, je suis à la recherche d'une alternance de 12 mois à partir de septembre 2026 pour mettre mes compétences au service d'une équipe ambitieuse.
-          </p>
-        </div>
+        <p
+          className="anim-fade-up max-w-xl text-body text-[1.05rem] leading-relaxed"
+          style={{ animationDelay: '900ms' }}
+        >
+          Passionné par la création d&apos;interfaces fluides et d&apos;architectures robustes, je conçois des applications web et mobile modernes.
+        </p>
 
-        <div className="mt-10">
-          <a href="#contact" className="inline-block py-3 px-8 bg-white text-black font-semibold rounded-full hover:bg-[#2997ff] hover:text-white transition-colors duration-300">
+        <div className="anim-fade-up mt-10 flex flex-wrap gap-4" style={{ animationDelay: '1020ms' }}>
+          <a href="#contact" className="inline-block py-3 px-8 bg-accent text-[var(--t-on-accent)] font-semibold rounded-full no-underline transition-transform duration-300 hover:scale-105">
             Me contacter
+          </a>
+          <a href="#/cv" className="inline-block py-3 px-8 border border-accent/40 text-accent font-semibold rounded-full no-underline transition-colors duration-300 hover:bg-accent/10">
+            Voir mon CV
           </a>
         </div>
       </div>
 
-      <div className="flex-shrink-0 flex justify-center [perspective:1000px] w-full lg:w-auto mb-10 lg:mb-0">
+      {/* L'animation est portée par le wrapper : sinon son transform final écraserait le tilt */}
+      <div className="anim-fade-up flex-shrink-0 flex justify-center [perspective:1000px] w-full lg:w-auto mb-10 lg:mb-0" style={{ animationDelay: '200ms' }}>
         <div
-          className="w-[240px] sm:w-[300px] lg:w-[320px] aspect-[4/5] rounded-[30px] overflow-hidden transition-transform ease-out duration-200 [transform-style:preserve-3d] shadow-2xl shadow-[#2997ff]/10"
+          className="w-[240px] sm:w-[300px] lg:w-[320px] aspect-[4/5] rounded-[30px] overflow-hidden transition-transform ease-out duration-200 [transform-style:preserve-3d] shadow-[var(--t-card-shadow)] border border-line"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
-          <img 
-            src={Profil} 
-            alt="Raphaël Dubost" 
-            className="w-full h-full object-cover" 
+          <img
+            src={Profil}
+            alt="Raphaël Dubost"
+            width={640}
+            height={960}
+            className="w-full h-full object-cover"
           />
         </div>
       </div>

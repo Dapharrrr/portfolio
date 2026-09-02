@@ -1,13 +1,13 @@
-import { 
+import {
   Lightbulb,
   Users,
   Compass,
   RefreshCw
 } from 'lucide-react';
 
-import { 
-  FaReact, 
-  FaNodeJs 
+import {
+  FaReact,
+  FaNodeJs
 } from 'react-icons/fa';
 import {
   SiNextdotjs,
@@ -17,6 +17,7 @@ import {
   SiGraphql,
   SiNestjs
 } from 'react-icons/si';
+import SectionHeading from './SectionHeading';
 
 const HARD_SKILLS = [
   { name: 'React', icon: <FaReact size={20} /> },
@@ -36,64 +37,50 @@ const SOFT_SKILLS = [
   { name: 'Adaptabilité', icon: <RefreshCw size={20} /> },
 ];
 
-const Competences = () => {
-  return (
-    <section id="competences" className="py-24 w-full flex flex-col items-start">
+const Competences = () => (
+  <section id="competences" className="py-24">
+    <SectionHeading label="Compétences" title="Ce avec quoi je construis" />
 
-      <div className="text-left mb-16 w-full max-w-5xl">
-        <h2 className="text-[clamp(2rem,5vw,3.5rem)] font-bold tracking-tight text-[#f5f5f7] mb-4">
-          Mes <span className="text-[#2997ff]">Compétences</span>
-        </h2>
-        <p className="text-[#86868b] text-lg max-w-2xl">
-          Les technologies et qualités que j&apos;utilise au quotidien pour concevoir des expériences web performantes.
-        </p>
+    <p className="text-muted text-lg max-w-2xl -mt-6 mb-16">
+      Les technologies et qualités que j&apos;utilise au quotidien pour concevoir des expériences web performantes.
+    </p>
+
+    <div className="flex flex-col gap-14">
+      <div>
+        <h3 className="text-xs text-muted uppercase tracking-[0.28em] font-bold mb-6">Hard Skills</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {HARD_SKILLS.map((skill) => (
+            <div
+              key={skill.name}
+              className="surface-raised flex items-center gap-3 p-4 rounded-2xl border border-line transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/40 hover:shadow-[var(--t-card-shadow-hover)] cursor-default group"
+            >
+              <div className="text-accent transition-transform duration-300 group-hover:scale-110">
+                {skill.icon}
+              </div>
+              <span className="text-ink font-semibold">{skill.name}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="w-full max-w-5xl flex flex-col gap-16">
-
-        {/* HARD SKILLS */}
-        <div>
-          <h3 className="text-sm text-[#86868b] uppercase tracking-[3px] font-semibold mb-8 text-left">
-            Hard Skills
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {HARD_SKILLS.map((skill, index) => (
-              <div 
-                key={index}
-                className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 cursor-default group"
-              >
-                <div className="text-[#2997ff] group-hover:scale-110 transition-transform duration-300">
-                  {skill.icon}
-                </div>
-                <span className="text-[#f5f5f7] font-medium">{skill.name}</span>
+      <div>
+        <h3 className="text-xs text-muted uppercase tracking-[0.28em] font-bold mb-6">Soft Skills</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {SOFT_SKILLS.map((skill) => (
+            <div
+              key={skill.name}
+              className="flex items-center gap-3 p-4 rounded-2xl bg-accent/8 border border-accent/25 shadow-[var(--t-card-shadow)] transition-all duration-300 hover:-translate-y-1.5 hover:bg-accent/12 hover:shadow-[var(--t-card-shadow-hover)] cursor-default group"
+            >
+              <div className="text-accent transition-transform duration-300 group-hover:scale-110">
+                {skill.icon}
               </div>
-            ))}
-          </div>
+              <span className="text-ink font-semibold">{skill.name}</span>
+            </div>
+          ))}
         </div>
-
-        {/* SOFT SKILLS */}
-        <div>
-          <h3 className="text-sm text-[#86868b] uppercase tracking-[3px] font-semibold mb-8 text-left">
-            Soft Skills
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {SOFT_SKILLS.map((skill, index) => (
-              <div 
-                key={index}
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[#2997ff]/5 border border-[#2997ff]/20 hover:bg-[#2997ff]/10 hover:-translate-y-1 transition-all duration-300 cursor-default group"
-              >
-                <div className="text-[#2997ff] group-hover:scale-110 transition-transform duration-300">
-                  {skill.icon}
-                </div>
-                <span className="text-[#e0f0ff] font-medium">{skill.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default Competences;
