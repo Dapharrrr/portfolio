@@ -11,7 +11,7 @@ const Contact = () => (
       </p>
       <div className="flex flex-wrap gap-4">
         <a
-          href="mailto:dubost.rapahel1@gmail.com?subject=Proposition%20d%27Alternance%20%E2%80%94%20Rapha%C3%ABl%20Dubost"
+          href="mailto:dubost.raphael1@gmail.com?subject=Proposition%20d%27Alternance%20%E2%80%94%20Rapha%C3%ABl%20Dubost"
           className="inline-flex items-center gap-2 justify-center bg-accent text-[var(--t-on-accent)] no-underline py-4 px-8 rounded-[30px] text-lg font-semibold transition-transform duration-200 hover:scale-105"
         >
           <Mail size={20} />
