@@ -1,6 +1,24 @@
 import Profil from '../assets/Raphael-D-960.jpg';
 
+const NAME_LINES = ['Raphaël', 'Dubost.'];
 const TITLE = 'Développeur Web Full Stack';
+const NAME_LENGTH = NAME_LINES.join('').length;
+
+/** Découpe le nom en lettres numérotées d'une ligne à l'autre : l'index sert à
+ *  la fois à poser la couleur sur la rampe encre → bleu et à décaler la vague. */
+const buildName = () => {
+  let index = 0;
+  return NAME_LINES.map((line) => ({
+    line,
+    letters: [...line].map((char) => {
+      const ratio = Math.round((index / (NAME_LENGTH - 1)) * 100);
+      index += 1;
+      return { char, ratio, delay: index * 40 };
+    }),
+  }));
+};
+
+const NAME = buildName();
 const LETTER_START = 520; // ms : le métier se compose après les deux lignes du nom
 const LETTER_STEP = 26;
 
@@ -37,13 +55,29 @@ const Hero = () => {
           Recherche d&apos;alternance (12 mois) — Sept 2026
         </div>
 
-        <h1 className="gradient-text font-display text-[clamp(2.75rem,7vw,4.75rem)] leading-[1.12] mb-3">
-          <span className="block overflow-hidden pb-[0.06em]">
-            <span className="anim-rise block" style={{ animationDelay: '120ms' }}>Raphaël</span>
-          </span>
-          <span className="block overflow-hidden pb-[0.06em]">
-            <span className="anim-rise block" style={{ animationDelay: '260ms' }}>Dubost.</span>
-          </span>
+        {/* pt/-mt : de la marge à l'intérieur du masque, sinon la lettre soulevée par la vague est rognée */}
+        <h1
+          className="name-wave font-display text-[clamp(2.75rem,7vw,4.75rem)] leading-[1.12] mb-3"
+          aria-label={NAME_LINES.join(' ')}
+        >
+          {NAME.map(({ line, letters }, lineIndex) => (
+            <span key={line} className="block overflow-hidden pt-[0.2em] -mt-[0.2em] pb-[0.06em]" aria-hidden="true">
+              <span className="anim-rise block" style={{ animationDelay: `${120 + lineIndex * 140}ms` }}>
+                {letters.map(({ char, ratio, delay }, i) => (
+                  <span
+                    key={`${char}-${i}`}
+                    className="name-letter"
+                    style={{
+                      color: `color-mix(in oklab, var(--t-ink), var(--t-accent) ${ratio}%)`,
+                      animationDelay: `${delay}ms`,
+                    }}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </span>
+            </span>
+          ))}
         </h1>
 
         <h2

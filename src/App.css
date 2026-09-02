@@ -47,12 +47,27 @@
   }
 }
 
-/* Titre du Hero : dégradé encre → bleu, valable dans les deux thèmes */
-.gradient-text {
-  background: linear-gradient(170deg, var(--t-ink) 20%, var(--t-accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Nom du Hero. Le dégradé encre → bleu n'est pas un background-clip mais une
+   couleur calculée lettre par lettre : background-clip:text cesse de peindre dès
+   que les glyphes sont dans des inline-block sous un bloc animé. Chaque lettre
+   porte donc sa propre couleur, ce qui laisse le champ libre aux transforms. */
+.name-letter {
+  display: inline-block;
+}
+
+@keyframes name-wave {
+  0% { transform: translateY(0); }
+  35% { transform: translateY(-0.16em); }
+  100% { transform: translateY(0); }
+}
+
+/* Survoler le nom fait courir une vague d'une lettre à l'autre */
+.name-wave:hover .name-letter {
+  animation: name-wave 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .name-wave:hover .name-letter { animation: none; }
 }
 
 /* Filet de section : part de l'accent et se dissout, moins présent qu'un trait plein */
