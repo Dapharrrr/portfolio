@@ -237,7 +237,7 @@ const Competences = () => {
 
   return (
     <section id="competences" className="py-24">
-      <SectionHeading label="Compétences" title="Ce avec quoi je construis" />
+      <SectionHeading label="Savoir-faire" title="Compétences" />
 
       <p className="text-muted text-lg max-w-2xl -mt-6 mb-16">
         De l&apos;interface au déploiement : la stack couche par couche, et les qualités
