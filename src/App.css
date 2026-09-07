@@ -125,6 +125,233 @@
   opacity: 1;
 }
 
+/* Schéma de la stack : quatre panneaux alignés en colonne, enfilés sur un axe
+   droit. Les bornes de l'axe et la position de la balle sont mesurées dans
+   Competences.jsx — les hauteurs de carte changent à chaque ouverture, elles ne
+   peuvent donc pas être écrites en dur. */
+.stack-deck {
+  position: relative;
+}
+
+.stack-rail {
+  position: absolute;
+  z-index: 0;
+  left: calc(var(--node-x, 2.25rem) - 1px);
+  top: var(--rail-top, 0);
+  height: var(--rail-h, 0);
+  width: 2px;
+  background: color-mix(in oklab, var(--t-accent), transparent 80%);
+  opacity: 0;
+  transition: opacity 0.6s ease 0.45s;
+}
+
+/* Portion parcourue : sa hauteur suit la balle image par image, donc l'axe se
+   remplit en descendant et se rétracte en remontant. */
+.stack-rail-fill {
+  position: absolute;
+  z-index: 0;
+  left: calc(var(--node-x, 2.25rem) - 1.5px);
+  top: var(--rail-top, 0);
+  height: var(--rail-fill, 0);
+  width: 3px;
+  border-radius: 2px;
+  background: var(--t-accent);
+  box-shadow: 0 0 10px color-mix(in oklab, var(--t-accent), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.6s ease 0.5s;
+}
+
+.is-revealed .stack-rail {
+  opacity: 1;
+}
+
+.is-revealed .stack-rail-fill {
+  opacity: 0.95;
+}
+
+.stack-slab {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: 0.9rem 1.75rem 1rem 3.75rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--t-line);
+  background: var(--t-card-bg);
+  box-shadow: inset 0 1px 0 var(--t-card-edge);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    padding 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+.stack-slab + .stack-slab {
+  margin-top: 0.85rem;
+}
+
+.is-revealed .stack-slab {
+  animation: slab-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--depth) * 120ms);
+}
+
+@keyframes slab-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stack-slab.is-active {
+  padding: 1.6rem 1.75rem 1.8rem 3.75rem;
+  border-color: color-mix(in oklab, var(--t-accent), transparent 60%);
+  box-shadow: var(--t-card-shadow-hover), inset 0 1px 0 var(--t-card-edge);
+}
+
+/* Nappe de lumière venue de l'axe : un dégradé ne s'anime pas, on le fait donc
+   apparaître en opacité depuis un calque dédié. */
+.stack-slab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, color-mix(in oklab, var(--t-accent), transparent 86%), transparent 68%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.stack-slab.is-active::before {
+  opacity: 1;
+}
+
+/* Anneau creux : c'est la balle qui vient lui servir de pastille */
+.stack-node {
+  position: absolute;
+  left: 1.5rem;
+  top: 0.95rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  border: 2px solid color-mix(in oklab, var(--t-accent), transparent 65%);
+  transition: top 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+.stack-slab.is-active .stack-node {
+  top: 1.75rem;
+  border-color: var(--t-accent);
+  box-shadow: 0 0 0 7px color-mix(in oklab, var(--t-accent), transparent 90%);
+}
+
+.stack-num {
+  opacity: 0.55;
+  transition: opacity 0.45s ease, letter-spacing 0.45s ease;
+}
+
+.stack-slab.is-active .stack-num {
+  opacity: 1;
+  letter-spacing: 0.42em;
+}
+
+/* Le titre grandit avec sa carte : c'est lui qui porte le changement d'échelle */
+.stack-title {
+  font-size: 1.05rem;
+  line-height: 1.35;
+  opacity: 0.6;
+  transition: font-size 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+}
+
+.stack-caption {
+  opacity: 0.6;
+  transition: opacity 0.5s ease;
+}
+
+.stack-slab.is-active .stack-title,
+.stack-slab.is-active .stack-caption {
+  opacity: 1;
+}
+
+.stack-slab.is-active .stack-title {
+  font-size: 1.6rem;
+}
+
+/* Accordéon : 0fr → 1fr anime une hauteur automatique sans la mesurer en JS */
+.stack-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    margin-top 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.4s ease;
+}
+
+.stack-body > div {
+  overflow: hidden;
+}
+
+.stack-slab.is-active .stack-body {
+  grid-template-rows: 1fr;
+  margin-top: 1.15rem;
+  opacity: 1;
+}
+
+/* Pastilles en filigrane d'accent : pas d'ombre portée, elle posait une flaque
+   sombre derrière chaque pilule. */
+.stack-chip {
+  background: color-mix(in oklab, var(--t-accent), transparent 92%);
+  border: 1px solid color-mix(in oklab, var(--t-accent), transparent 78%);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.3s ease;
+}
+
+.stack-slab.is-active .stack-chip {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: calc(var(--i, 0) * 55ms);
+}
+
+.stack-chip:hover {
+  background: color-mix(in oklab, var(--t-accent), transparent 85%);
+}
+
+/* Position et écrasement calculés image par image dans Competences.jsx */
+.stack-ball {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: var(--t-accent);
+  box-shadow: 0 0 10px 3px color-mix(in oklab, var(--t-accent), transparent 62%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease 0.65s;
+}
+
+.is-revealed .stack-ball {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack-slab,
+  .stack-node,
+  .stack-title,
+  .stack-chip,
+  .stack-slab.is-active .stack-chip {
+    transform: none;
+    transition: none;
+  }
+
+  .is-revealed .stack-slab { animation: none; }
+  .stack-slab { opacity: 1; }
+  .stack-chip { opacity: 1; }
+}
+
 /* Impression : on ne garde que le document */
 @media print {
   @page {
