@@ -10,6 +10,7 @@ import {
   FaReact,
   FaNodeJs
 } from 'react-icons/fa';
+import { TbBrandReactNative } from 'react-icons/tb';
 import {
   SiNextdotjs,
   SiTypescript,
@@ -18,7 +19,8 @@ import {
   SiGraphql,
   SiNestjs,
   SiDocker,
-  SiGithubactions
+  SiGithubactions,
+  SiTailwindcss
 } from 'react-icons/si';
 import SectionHeading from './SectionHeading';
 
@@ -31,8 +33,10 @@ const LAYERS = [
     caption: 'Ce que voit l’utilisateur',
     skills: [
       { name: 'React', icon: <FaReact size={18} /> },
+      { name: 'React Native', icon: <TbBrandReactNative size={18} /> },
       { name: 'Next.js', icon: <SiNextdotjs size={18} /> },
       { name: 'TypeScript', icon: <SiTypescript size={18} /> },
+      { name: 'Tailwind CSS', icon: <SiTailwindcss size={18} /> },
     ],
   },
   {
