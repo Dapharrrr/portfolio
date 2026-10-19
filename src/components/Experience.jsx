@@ -1,54 +1,78 @@
-import Card from './Card';
 import SectionHeading from './SectionHeading';
 
-const grid = 'grid grid-cols-1 md:grid-cols-3 gap-8';
-const content = 'relative z-10';
-const cardTitle = 'font-display text-2xl mb-2 text-ink';
-const cardDate = 'text-accent text-sm font-semibold mb-6 block';
-const cardText = 'text-body text-base mb-3';
+const STEPS = [
+  {
+    when: 'Avr. 2024',
+    company: 'MY-SERIOUS-GAME',
+    date: 'Avril — Juillet 2024 • Stage',
+    team: 'Service Informatique',
+    lines: [
+      'Conception et développement d\'une application web de personnalisation de personnages 2D à partir d\'une bibliothèque d\'assets.',
+      'Interfaces dynamiques en React, gestion de version avec Git.',
+    ],
+  },
+  {
+    when: 'Sept. 2024',
+    company: 'MY-SERIOUS-GAME',
+    date: 'Sept 2024 — Août 2025 • Alternance',
+    team: 'Service Informatique',
+    lines: [
+      'Conception d\'un starter web "out-of-the-box" : un socle technique commun, réutilisé d\'un projet à l\'autre pour industrialiser le démarrage et le déploiement des nouveaux projets.',
+      'Développement des mécaniques de jeu d\'une application Tap-to-Earn.',
+    ],
+  },
+  {
+    when: 'Sept. 2025',
+    company: 'AUGMANTED',
+    date: 'Sept 2025 — Présent • Alternance',
+    team: 'Service Informatique',
+    lines: [
+      'Maintenance évolutive du parc applicatif interne : garantir la pérennité et la continuité de service des outils métier.',
+      'Poursuite du développement de l\'application métier initiée en stage : optimisation logicielle et évolutions fonctionnelles sur un existant.',
+    ],
+  },
+  {
+    when: 'Déc. 2025',
+    kicker: 'Projet Entrepreneurial',
+    company: 'Sakado',
+    date: 'Déc 2025 — Présent • Programme école',
+    lines: [
+      'Conception de l\'architecture d\'une application mobile cross-platform en React Native : découpage applicatif et choix techniques du MVP.',
+      'Développement du MVP, centré sur l\'expérience utilisateur, dans le cadre d\'un programme d\'école.',
+    ],
+  },
+];
 
+/**
+ * Parcours du plus récent au plus ancien, une carte par poste. Un point vert
+ * signale les postes en cours.
+ */
 const Experience = () => (
-  <section id="experience" className="py-24">
-    <SectionHeading label="Parcours" title="Expérience professionnelle" />
-    <div className={grid}>
-      <Card>
-        <div className={content}>
-          <h3 className={cardTitle}>AUGMANTED</h3>
-          <span className={cardDate}>Sept 2025 — Présent • Alternance</span>
-          <p className={cardText}><strong className="text-ink">Service Informatique</strong></p>
-          <p className={cardText}>Maintenance évolutive du parc applicatif interne : garantir la pérennité et la continuité de service des outils métier.</p>
-          <p className={cardText}>Poursuite du développement de l&apos;application métier initiée en stage : optimisation logicielle et évolutions fonctionnelles sur un existant.</p>
-        </div>
-      </Card>
-      <Card index={1}>
-        <div className={content}>
-          <h3 className={cardTitle}>MY-SERIOUS-GAME</h3>
-          <span className={cardDate}>Sept 2024 — Août 2025 • Alternance</span>
-          <p className={cardText}><strong className="text-ink">Service Informatique</strong></p>
-          <p className={cardText}>Conception d&apos;un starter web &quot;out-of-the-box&quot; : un socle technique commun, réutilisé d&apos;un projet à l&apos;autre pour industrialiser le démarrage et le déploiement des nouveaux projets.</p>
-          <p className={cardText}>Développement des mécaniques de jeu d&apos;une application Tap-to-Earn.</p>
-        </div>
-      </Card>
-      <Card index={2}>
-        <div className={content}>
-          <h3 className={cardTitle}>MY-SERIOUS-GAME</h3>
-          <span className={cardDate}>Avril — Juillet 2024 • Stage</span>
-          <p className={cardText}><strong className="text-ink">Service Informatique</strong></p>
-          <p className={cardText}>Conception et développement d&apos;une application web de personnalisation de personnages 2D à partir d&apos;une bibliothèque d&apos;assets.</p>
-          <p className={cardText}>Interfaces dynamiques en React, gestion de version avec Git.</p>
-        </div>
-      </Card>
-    </div>
+  <section id="experience" className="section">
+    <SectionHeading id="experience" title="Expérience" />
 
-    <h3 className="text-xs text-muted uppercase tracking-[0.28em] font-bold mt-16 mb-8">Projet Entrepreneurial</h3>
-    <Card index={1}>
-      <div className={content}>
-        <h3 className={cardTitle}>Sakado</h3>
-        <span className={cardDate}>Déc 2025 — Présent • Programme école</span>
-        <p className={cardText}>Conception de l&apos;architecture d&apos;une application mobile cross-platform en React Native : découpage applicatif et choix techniques du MVP.</p>
-        <p className={cardText}>Développement du MVP, centré sur l&apos;expérience utilisateur, dans le cadre d&apos;un programme d&apos;école.</p>
-      </div>
-    </Card>
+    <ol className="section-body space-y-4">
+      {[...STEPS].reverse().map((step) => {
+        const [period, kind] = step.date.split(' • ');
+        return (
+          <li key={`${step.company}-${step.when}`} data-reveal className="card p-7 sm:p-9">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+              <h3 className="text-xl font-medium tracking-[-0.01em] text-ink">{step.company}</h3>
+              <p className="flex items-center gap-2 font-mono text-xs text-muted">
+                {period.includes('Présent') && <span className="availability-dot" aria-hidden="true" />}
+                {period}
+              </p>
+            </div>
+            <p className="mt-1 text-sm text-muted">
+              {[step.kicker, kind, step.team].filter(Boolean).join(' · ')}
+            </p>
+            <div className="mt-6 max-w-2xl space-y-3 leading-relaxed text-body">
+              {step.lines.map((line) => <p key={line}>{line}</p>)}
+            </div>
+          </li>
+        );
+      })}
+    </ol>
   </section>
 );
 

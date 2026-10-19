@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
-/* Palette reprise du CV : bleu #24509b, encre #1b1b1f, texte #33343a, gris #5b5c63.
-   Les tokens Tailwind pointent vers des variables --t-* que le thème réassigne. */
+/* Palette épurée : presque blanc, encre, et le bleu du CV #24509b réservé aux
+   numéros d'étape et aux survols. Les tokens Tailwind pointent vers des
+   variables --t-* que le thème réassigne. */
 @theme {
   --color-page: var(--t-page);
   --color-surface: var(--t-surface);
@@ -11,72 +12,46 @@
   --color-accent: var(--t-accent);
   --color-line: var(--t-line);
 
-  --font-display: "Hammersmith One", Impact, sans-serif;
-  --font-sans: Nunito, system-ui, -apple-system, sans-serif;
+  --font-display: Geist, system-ui, sans-serif;
+  --font-sans: Geist, system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
 }
 
 :root,
 :root[data-theme="light"] {
   color-scheme: light;
-  --t-page: #f4f6fa;
+  --t-page: #f4f4f2;
   --t-surface: #ffffff;
-  --t-ink: #1b1b1f;
-  --t-body: #33343a;
-  --t-muted: #5b5c63;
+  --t-ink: #111113;
+  --t-body: #3f3f46;
+  --t-muted: #8a8a93;
   --t-accent: #24509b;
   --t-on-accent: #ffffff;
-  --t-line: rgba(27, 27, 31, 0.1);
-  /* Volume : dégradé de surface + liseré de lumière en haut + ombre en trois couches */
-  --t-card-bg: linear-gradient(158deg, #ffffff 0%, #e9edf5 100%);
-  --t-card-edge: rgba(255, 255, 255, 0.9);
-  --t-card-shadow:
-    0 1px 2px rgba(27, 27, 31, 0.05),
-    0 6px 14px rgba(27, 27, 31, 0.05),
-    0 18px 36px rgba(36, 80, 155, 0.08);
-  --t-card-shadow-hover:
-    0 2px 4px rgba(27, 27, 31, 0.06),
-    0 14px 30px rgba(36, 80, 155, 0.13),
-    0 44px 72px rgba(36, 80, 155, 0.16);
-  --t-bg-glow:
-    radial-gradient(58% 46% at 10% 4%, rgba(36, 80, 155, 0.13), transparent 68%),
-    radial-gradient(52% 42% at 92% 68%, rgba(36, 80, 155, 0.1), transparent 70%);
-  --t-contour: rgba(36, 80, 155, 0.14);
-  --t-spotlight-near: rgba(255, 255, 255, 0.85);
-  --t-spotlight-far: rgba(36, 80, 155, 0.14);
+  --t-line: rgba(17, 17, 19, 0.08);
+  --t-card-shadow: 0 1px 2px rgba(17, 17, 19, 0.04), 0 8px 24px rgba(17, 17, 19, 0.04);
+  --t-card-shadow-hover: 0 2px 4px rgba(17, 17, 19, 0.05), 0 22px 48px rgba(17, 17, 19, 0.09);
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --t-page: #0c1016;
-  --t-surface: rgba(255, 255, 255, 0.04);
-  --t-ink: #f2f4f8;
-  --t-body: #c5cad6;
-  --t-muted: #8a93a4;
-  --t-accent: #6ea3f2;
-  --t-on-accent: #0c1016;
-  --t-line: rgba(255, 255, 255, 0.09);
-  --t-card-bg: linear-gradient(158deg, rgba(255, 255, 255, 0.085) 0%, rgba(255, 255, 255, 0.015) 100%);
-  --t-card-edge: rgba(255, 255, 255, 0.14);
-  --t-card-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.4),
-    0 8px 20px rgba(0, 0, 0, 0.32),
-    0 24px 48px rgba(0, 0, 0, 0.38);
-  --t-card-shadow-hover:
-    0 2px 6px rgba(0, 0, 0, 0.5),
-    0 18px 40px rgba(0, 0, 0, 0.5),
-    0 48px 80px rgba(110, 163, 242, 0.16);
-  --t-bg-glow:
-    radial-gradient(58% 46% at 10% 4%, rgba(110, 163, 242, 0.15), transparent 68%),
-    radial-gradient(52% 42% at 92% 68%, rgba(110, 163, 242, 0.1), transparent 70%);
-  --t-contour: rgba(110, 163, 242, 0.13);
-  --t-spotlight-near: rgba(255, 255, 255, 0.08);
-  --t-spotlight-far: rgba(110, 163, 242, 0.22);
+  --t-page: #0b0b0c;
+  --t-surface: #151517;
+  --t-ink: #f4f4f5;
+  --t-body: #b4b4bc;
+  --t-muted: #71717a;
+  --t-accent: #7aa7f0;
+  --t-on-accent: #0c0c0d;
+  --t-line: rgba(255, 255, 255, 0.08);
+  /* En sombre, un liseré de lumière en haut remplace l'ombre, invisible sur noir */
+  --t-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --t-card-shadow-hover: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 22px 48px rgba(0, 0, 0, 0.55);
 }
 
 @layer base {
   html {
-    font-family: Nunito, system-ui, -apple-system, sans-serif;
+    font-family: Geist, system-ui, -apple-system, sans-serif;
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
     background-color: var(--t-page);
     color: var(--t-body);
     line-height: 1.5;

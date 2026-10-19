@@ -1,13 +1,21 @@
+import { WAYPOINTS } from '../itinerary';
+
 /**
- * Titre de section repris du CV : petit label bleu très espacé, titre display,
- * puis le filet fin qui sépare les blocs.
+ * En-tête de section, dans la colonne de gauche : le numéro d'étape puis le
+ * titre. Le numéro porte `data-waypoint`, que la nav lit pour savoir où l'on
+ * en est.
  */
-const SectionHeading = ({ label, title }) => (
-  <div className="mb-12">
-    <p className="text-accent text-xs font-bold uppercase tracking-[0.28em] mb-3">{label}</p>
-    <h2 className="font-display text-[clamp(1.9rem,4.5vw,2.9rem)] leading-tight text-ink">{title}</h2>
-    <hr className="rule mt-6" />
-  </div>
-);
+const SectionHeading = ({ id, title }) => {
+  const number = String(WAYPOINTS.findIndex((w) => w.id === id) + 1).padStart(2, '0');
+
+  return (
+    <div className="section-head">
+      <div className="lg:sticky lg:top-28">
+        <span data-waypoint={id} className="font-mono text-xs text-accent tabular-nums">{number}</span>
+        <h2 className="mt-2 text-2xl font-medium tracking-[-0.02em] text-ink">{title}</h2>
+      </div>
+    </div>
+  );
+};
 
 export default SectionHeading;

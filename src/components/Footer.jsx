@@ -1,12 +1,10 @@
 const Footer = () => (
-  <footer className="text-center py-16 text-muted border-t border-line">
-    <p className="font-display text-ink">Raphaël Dubost © 2026</p>
-    <p className="text-xs mt-2">
-      <a href="https://github.com/Dapharrrr" target="_blank" rel="noreferrer" className="text-accent no-underline hover:underline">GitHub</a>
-      {' • '}
-      <a href="https://www.linkedin.com/in/rapha%C3%ABl-dubost/" target="_blank" rel="noreferrer" className="text-accent no-underline hover:underline">LinkedIn</a>
-      {' • '}
-      <a href="#/cv" className="text-accent no-underline hover:underline">CV</a>
+  <footer className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-between gap-4 px-6 pb-12 pt-4 text-sm text-muted sm:px-10">
+    <p>Raphaël Dubost © 2026</p>
+    <p className="flex gap-6">
+      <a href="https://github.com/Dapharrrr" target="_blank" rel="noreferrer" className="no-underline transition-colors hover:text-ink">GitHub</a>
+      <a href="https://www.linkedin.com/in/rapha%C3%ABl-dubost/" target="_blank" rel="noreferrer" className="no-underline transition-colors hover:text-ink">LinkedIn</a>
+      <a href="#/cv" className="no-underline transition-colors hover:text-ink">CV</a>
     </p>
   </footer>
 );

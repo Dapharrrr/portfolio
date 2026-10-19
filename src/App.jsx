@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import ContourCanvas from './components/ContourCanvas';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Competences from './components/Competences';
@@ -25,23 +24,41 @@ const useHashRoute = () => {
   return hash;
 };
 
+/* Apparition douce : chaque bloc marqué `data-reveal` remonte en fondu la
+   première fois qu'il entre à l'écran. */
+const useReveal = (enabled) => {
+  useEffect(() => {
+    if (!enabled) return undefined;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [enabled]);
+};
+
 const App = () => {
   const hash = useHashRoute();
+  const isCV = hash.startsWith('#/cv');
+  useReveal(!isCV);
 
-  if (hash.startsWith('#/cv')) return <CV />;
+  if (isCV) return <CV />;
 
   return (
     <>
-      <ContourCanvas />
       <Navbar />
-      <div className="max-w-[1100px] mx-auto px-5 sm:px-8">
+      <main className="mx-auto max-w-[1120px] px-6 sm:px-10">
         <Hero />
         <Competences />
         <Experience />
         <Education />
         <Demos />
         <Contact />
-      </div>
+      </main>
       <Footer />
     </>
   );

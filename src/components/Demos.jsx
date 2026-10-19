@@ -1,45 +1,68 @@
 import { useState } from 'react';
-import Card from './Card';
 import SectionHeading from './SectionHeading';
 import somebuddyVideo from '../assets/somebuddy.mp4';
 
 const sakadoVideo = 'https://github.com/Dapharrrr/portfolio/releases/download/assets-v1/sakadoV2.mp4';
 
-const Badge = ({ children, accent = false }) => (
-  <span
-    className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${
-      accent ? 'bg-accent/10 text-accent border-accent/25' : 'bg-surface text-muted border-line'
-    }`}
-  >
-    {children}
-  </span>
-);
-
+/* Aperçu muet : un bouton lecture blanc posé sur la vidéo, rien d'autre */
 const VideoPreview = ({ src, onClick, portrait = false }) => (
-  <div
-    className={`relative rounded-xl mb-6 overflow-hidden border border-line cursor-pointer group ${portrait ? 'aspect-[9/16] w-full' : 'w-full aspect-video'}`}
+  <button
+    type="button"
+    aria-label="Lire la vidéo"
+    className={`group relative block h-full w-full cursor-pointer overflow-hidden rounded-2xl bg-page ${portrait ? 'min-h-[26rem]' : 'aspect-video lg:aspect-auto lg:min-h-[20rem]'}`}
     onClick={onClick}
   >
-    <video src={src} muted loop playsInline preload="metadata" className={`w-full h-full ${portrait ? 'object-contain bg-black' : 'object-cover'}`} />
-    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-100 group-hover:bg-black/20 transition-all">
-      <svg className="w-14 h-14 text-white/80 group-hover:text-white group-hover:scale-110 transition-all drop-shadow-lg" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" fillRule="evenodd" />
-      </svg>
-    </div>
-  </div>
+    <video src={src} muted loop playsInline preload="metadata" className={`absolute inset-0 h-full w-full ${portrait ? 'object-contain' : 'object-cover'}`} />
+    <span className="absolute inset-0 grid place-items-center">
+      <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 text-[#111113] shadow-[var(--t-card-shadow)] transition-transform duration-300 group-hover:scale-110">
+        <svg className="ml-0.5 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4.5v11a.5.5 0 0 0 .77.42l8.5-5.5a.5.5 0 0 0 0-.84l-8.5-5.5A.5.5 0 0 0 6 4.5Z" /></svg>
+      </span>
+    </span>
+  </button>
 );
 
-const MissingVideo = () => (
-  <div className="w-full aspect-video bg-accent/5 rounded-xl mb-6 border border-line flex gap-2 items-center justify-center text-muted text-sm cursor-not-allowed" title="Vidéo non disponible pour le moment">
-    <svg className="w-8 h-8 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
-    <span>Vidéo non disponible</span>
-  </div>
-);
+const PROJECTS = [
+  {
+    title: 'Application Sakado',
+    badges: [{ label: 'BETA' }, { label: 'Projet entrepreneurial', accent: true }],
+    text: 'Aperçu de l\'application mobile développée en React Native. Actuellement, nous réalisons des phases de bêta test avant de sortir l\'application sur les stores.',
+    video: sakadoVideo,
+    portrait: true,
+  },
+  {
+    title: 'Générateur de Persos 2D',
+    badges: [{ label: 'Outil interne' }],
+    text: 'Démonstration de l\'outil interne créé lors de mon stage chez My-Serious-Game.',
+    video: somebuddyVideo,
+  },
+  {
+    title: 'AppHub',
+    github: 'https://github.com/Dapharrrr/apphub/tree/main',
+    badges: [{ label: 'En cours', accent: true }],
+    text: 'Conception d\'un espace de travail unifié et modulaire. Ce projet combine une architecture cœur robuste (authentification, base de données centralisée) avec un tableau de bord hautement personnalisable. L\'objectif est de permettre à l\'utilisateur de greffer et d\'organiser différentes mini-applications (gestionnaire de tâches, notes, flux d\'API externes) sur une seule interface fluide.',
+  },
+  {
+    title: 'Soft Skills Families',
+    github: 'https://github.com/Dapharrrr/soft-skills-families',
+    badges: [{ label: 'En cours', accent: true }],
+    text: 'Jeu de cartes physique en anglais inspiré des 7 familles, centré sur les soft skills. Les joueurs jouent avec de vraies cartes, et lorsqu\'une famille est complétée, l\'application web prend le relais : elle affiche une question bonus, et accorde un pouvoir spécial en cas de bonne réponse.',
+  },
+];
 
-const GithubLink = ({ href }) => (
-  <a href={href} target="_blank" rel="noreferrer" className="text-muted hover:text-accent transition-colors flex items-center" title="Voir sur GitHub">
-    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
-  </a>
+const withVideo = PROJECTS.filter((project) => project.video);
+const textOnly = PROJECTS.filter((project) => !project.video);
+
+const ProjectText = ({ project, className = '' }) => (
+  <div className={`flex flex-col ${className}`.trim()}>
+    <p className="text-sm text-muted">{project.badges.map(({ label }) => label).join(' · ')}</p>
+    <h3 className="mt-2 text-xl font-medium tracking-[-0.01em] text-ink">{project.title}</h3>
+    <p className="mt-4 leading-relaxed text-body">{project.text}</p>
+    {project.github && (
+      <a href={project.github} target="_blank" rel="noreferrer" className="link-arrow mt-auto pt-6 text-sm font-medium text-ink">
+        Voir sur GitHub
+      </a>
+    )}
+  </div>
 );
 
 const Demos = () => {
@@ -47,69 +70,32 @@ const Demos = () => {
   const closeVideo = () => setActiveVideo(null);
 
   return (
-    <section id="demos" className="py-24">
-      <SectionHeading label="Réalisations" title="Démos & projets" />
+    <section id="demos" className="section">
+      <SectionHeading id="demos" title="Démos & projets" />
 
-      {/* Projet entrepreneurial — bloc séparé */}
-      <div className="mb-8">
-        <Card index={1}>
-          <div className="relative z-10 flex flex-col md:flex-row gap-6 h-full">
-            <div className="md:w-52 shrink-0">
-              <VideoPreview src={sakadoVideo} onClick={() => setActiveVideo(sakadoVideo)} portrait />
-            </div>
-            <div className="flex flex-col justify-center">
-              <div className="flex flex-wrap items-center gap-3 mb-2">
-                <h3 className="font-display text-2xl text-ink">Application Sakado</h3>
-                <Badge>BETA</Badge>
-                <Badge accent>Projet entrepreneurial</Badge>
-              </div>
-              <p className="text-body text-base">Aperçu de l&apos;application mobile développée en React Native. Actuellement, nous réalisons des phases de bêta test avant de sortir l&apos;application sur les stores.</p>
-            </div>
-          </div>
-        </Card>
-      </div>
+      <div className="section-body space-y-4">
+        {/* Projets avec démo : carte large, la vidéo à gauche */}
+        {withVideo.map((project) => (
+          <article key={project.title} data-reveal className="card grid gap-2 p-3 lg:grid-cols-[1.25fr_1fr]">
+            <VideoPreview src={project.video} onClick={() => setActiveVideo(project.video)} portrait={project.portrait} />
+            <ProjectText project={project} className="p-5 lg:p-7" />
+          </article>
+        ))}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Card>
-          <div className="relative z-10 flex flex-col h-full">
-            <VideoPreview src={somebuddyVideo} onClick={() => setActiveVideo(somebuddyVideo)} />
-            <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h3 className="font-display text-2xl text-ink">Générateur de Persos 2D</h3>
-              <Badge>Outil interne</Badge>
-            </div>
-            <p className="text-body text-base">Démonstration de l&apos;outil interne créé lors de mon stage chez My-Serious-Game.</p>
-          </div>
-        </Card>
-
-        <Card index={1}>
-          <div className="relative z-10 flex flex-col h-full">
-            <MissingVideo />
-            <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h3 className="font-display text-2xl text-ink">AppHub</h3>
-              <GithubLink href="https://github.com/Dapharrrr/apphub/tree/main" />
-              <Badge accent>En cours</Badge>
-            </div>
-            <p className="text-body text-base">Conception d&apos;un espace de travail unifié et modulaire. Ce projet combine une architecture cœur robuste (authentification, base de données centralisée) avec un tableau de bord hautement personnalisable. L&apos;objectif est de permettre à l&apos;utilisateur de greffer et d&apos;organiser différentes mini-applications (gestionnaire de tâches, notes, flux d&apos;API externes) sur une seule interface fluide.</p>
-          </div>
-        </Card>
-
-        <Card index={2}>
-          <div className="relative z-10 flex flex-col h-full">
-            <MissingVideo />
-            <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h3 className="font-display text-2xl text-ink">Soft Skills Families</h3>
-              <GithubLink href="https://github.com/Dapharrrr/soft-skills-families" />
-              <Badge accent>En cours</Badge>
-            </div>
-            <p className="text-body text-base">Jeu de cartes physique en anglais inspiré des 7 familles, centré sur les soft skills. Les joueurs jouent avec de vraies cartes, et lorsqu&apos;une famille est complétée, l&apos;application web prend le relais : elle affiche une question bonus, et accorde un pouvoir spécial en cas de bonne réponse.</p>
-          </div>
-        </Card>
+        {/* Projets sans démo : deux cartes côte à côte */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          {textOnly.map((project) => (
+            <article key={project.title} data-reveal className="card">
+              <ProjectText project={project} className="p-7 sm:p-8" />
+            </article>
+          ))}
+        </div>
       </div>
 
       {activeVideo && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={closeVideo}>
-          <div className="relative w-full max-w-5xl bg-black rounded-xl overflow-hidden border border-line shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <button className="absolute top-4 right-4 z-[60] bg-black/60 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/20 transition-colors" onClick={closeVideo} aria-label="Fermer la vidéo">✕</button>
+          <div className="relative w-full max-w-5xl overflow-hidden rounded-2xl bg-black" onClick={(e) => e.stopPropagation()}>
+            <button className="absolute top-4 right-4 z-[60] grid h-10 w-10 place-items-center rounded-full bg-white/90 text-[#111113] transition-transform hover:scale-105" onClick={closeVideo} aria-label="Fermer la vidéo">✕</button>
             <video src={activeVideo} autoPlay controls className="w-full h-auto max-h-[85vh] object-contain" />
           </div>
         </div>

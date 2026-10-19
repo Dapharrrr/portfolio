@@ -1,355 +1,154 @@
-/* Nappe lumineuse : c'est elle qui donne la profondeur, sous les courbes */
-#bg-glow {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  background: var(--t-bg-glow);
-  pointer-events: none;
-}
-
-/* Fond animé : courbes de niveau, estompées vers le bas pour alléger la page */
-#bg-canvas {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.45) 38%, transparent 78%);
-  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.45) 38%, transparent 78%);
-}
-
-/* Entrée du Hero : les lignes du nom montent derrière un masque, le reste
-   remonte en fondu, le métier se compose lettre par lettre. */
-@keyframes hero-rise {
-  from { transform: translateY(105%); }
-  to { transform: translateY(0); }
-}
-
-@keyframes hero-fade-up {
-  from { opacity: 0; transform: translateY(16px); }
+/* Entrée du Hero : chaque bloc remonte en fondu, l'un après l'autre */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes hero-letter {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.anim-fade-up {
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.anim-rise { animation: hero-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.anim-fade-up { animation: hero-fade-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.anim-letter { animation: hero-letter 0.5s ease-out both; }
+/* Blocs révélés au scroll (voir useReveal dans App.jsx) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.9s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-@media (prefers-reduced-motion: reduce) {
-  .anim-rise,
-  .anim-fade-up,
-  .anim-letter {
-    animation: none;
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Bloc qui sort du conteneur pour occuper toute la largeur de la fenêtre */
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+/* Section : le numéro et le titre à gauche, le contenu à droite */
+.section {
+  display: grid;
+  gap: 2.5rem;
+  padding: 7rem 0;
+}
+
+@media (min-width: 64rem) {
+  .section {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 2rem;
+    padding: 9rem 0;
   }
+
+  .section-head { grid-column: span 3; }
+  .section-body { grid-column: span 9; }
 }
 
-/* Nom du Hero. Le dégradé encre → bleu n'est pas un background-clip mais une
-   couleur calculée lettre par lettre : background-clip:text cesse de peindre dès
-   que les glyphes sont dans des inline-block sous un bloc animé. Chaque lettre
-   porte donc sa propre couleur, ce qui laisse le champ libre aux transforms. */
-.name-letter {
-  display: inline-block;
+/* Massif du Hero : deux aplats sans contour, fondus dans la page vers le bas */
+.hero-range {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: clamp(9rem, 26vh, 16rem);
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 35%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 35%, transparent 100%);
 }
 
-@keyframes name-wave {
-  0% { transform: translateY(0); }
-  35% { transform: translateY(-0.16em); }
-  100% { transform: translateY(0); }
+.hero-range svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: fade-up 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
 }
 
-/* Survoler le nom fait courir une vague d'une lettre à l'autre */
-.name-wave:hover .name-letter {
-  animation: name-wave 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+.hero-range .is-back {
+  fill: color-mix(in oklab, var(--t-ink) 4%, var(--t-page));
+  transform: translate3d(0, calc(var(--p, 0) * 3rem), 0);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .name-wave:hover .name-letter { animation: none; }
+.hero-range .is-front {
+  fill: color-mix(in oklab, var(--t-ink) 7%, var(--t-page));
 }
 
-/* Filet de section : part de l'accent et se dissout, moins présent qu'un trait plein */
-.rule {
-  height: 2px;
-  border: 0;
-  background: linear-gradient(90deg, var(--t-accent), transparent 62%);
-  opacity: 0.5;
-}
-
-/* Volume : surface dégradée, liseré de lumière en haut, ombre en couches.
-   Partagé par les cartes, les pastilles de compétences et la barre de nav. */
-.surface-raised {
-  background: var(--t-card-bg);
-  box-shadow: var(--t-card-shadow), inset 0 1px 0 var(--t-card-edge);
-}
-
+/* Carte : un aplat et une ombre très douce, aucune bordure. Au survol elle se
+   soulève par `translate`, pour ne pas entrer en conflit avec le `transform`
+   de l'apparition au scroll. */
 .card {
-  background: var(--t-card-bg);
-  box-shadow: var(--t-card-shadow), inset 0 1px 0 var(--t-card-edge);
-  transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+  background: var(--t-surface);
+  border-radius: 1.5rem;
+  box-shadow: var(--t-card-shadow);
+  transition:
+    translate 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s ease,
+    opacity 0.9s ease,
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card:hover {
-  box-shadow: var(--t-card-shadow-hover), inset 0 1px 0 var(--t-card-edge);
+  translate: 0 -4px;
+  box-shadow: var(--t-card-shadow-hover);
 }
 
-/* Reflet qui suit le curseur, piloté par --mouse-x / --mouse-y depuis Card.jsx */
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: radial-gradient(340px circle at var(--mouse-x, 50%) var(--mouse-y, 0), var(--t-spotlight-near), transparent 60%);
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.4s;
-  pointer-events: none;
-  mix-blend-mode: soft-light;
+/* Bloc d'appel inversé : fond encre, texte couleur de page */
+.card-invert {
+  background: var(--t-ink);
+  color: var(--t-page);
+  border-radius: 2rem;
 }
 
-.card::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: radial-gradient(520px circle at var(--mouse-x, 50%) var(--mouse-y, 0), var(--t-spotlight-far), transparent 55%);
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.4s;
+/* Lien texte : la flèche avance au survol */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  text-decoration: none;
+  transition: color 0.25s ease;
 }
 
-.card:hover::before,
-.card:hover::after {
-  opacity: 1;
+.link-arrow::after {
+  content: "→";
+  transition: transform 0.25s ease;
 }
 
-/* Schéma de la stack : quatre panneaux alignés en colonne, enfilés sur un axe
-   droit. Les bornes de l'axe et la position de la balle sont mesurées dans
-   Competences.jsx — les hauteurs de carte changent à chaque ouverture, elles ne
-   peuvent donc pas être écrites en dur. */
-.stack-deck {
-  position: relative;
+.link-arrow:hover {
+  color: var(--t-accent);
 }
 
-.stack-rail {
-  position: absolute;
-  z-index: 0;
-  left: calc(var(--node-x, 2.25rem) - 1px);
-  top: var(--rail-top, 0);
-  height: var(--rail-h, 0);
-  width: 2px;
-  background: color-mix(in oklab, var(--t-accent), transparent 80%);
-  opacity: 0;
-  transition: opacity 0.6s ease 0.45s;
+.link-arrow:hover::after {
+  transform: translateX(0.25em);
 }
 
-/* Portion parcourue : sa hauteur suit la balle image par image, donc l'axe se
-   remplit en descendant et se rétracte en remontant. */
-.stack-rail-fill {
-  position: absolute;
-  z-index: 0;
-  left: calc(var(--node-x, 2.25rem) - 1.5px);
-  top: var(--rail-top, 0);
-  height: var(--rail-fill, 0);
-  width: 3px;
-  border-radius: 2px;
-  background: var(--t-accent);
-  box-shadow: 0 0 10px color-mix(in oklab, var(--t-accent), transparent 55%);
-  opacity: 0;
-  transition: opacity 0.6s ease 0.5s;
-}
-
-.is-revealed .stack-rail {
-  opacity: 1;
-}
-
-.is-revealed .stack-rail-fill {
-  opacity: 0.95;
-}
-
-.stack-slab {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  padding: 0.9rem 1.75rem 1rem 3.75rem;
-  border-radius: 1.25rem;
-  border: 1px solid var(--t-line);
-  background: var(--t-card-bg);
-  box-shadow: inset 0 1px 0 var(--t-card-edge);
-  cursor: pointer;
-  opacity: 0;
-  transition:
-    padding 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.5s ease,
-    box-shadow 0.5s ease;
-}
-
-.stack-slab + .stack-slab {
-  margin-top: 0.85rem;
-}
-
-.is-revealed .stack-slab {
-  animation: slab-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(var(--depth) * 120ms);
-}
-
-@keyframes slab-in {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.stack-slab.is-active {
-  padding: 1.6rem 1.75rem 1.8rem 3.75rem;
-  border-color: color-mix(in oklab, var(--t-accent), transparent 60%);
-  box-shadow: var(--t-card-shadow-hover), inset 0 1px 0 var(--t-card-edge);
-}
-
-/* Nappe de lumière venue de l'axe : un dégradé ne s'anime pas, on le fait donc
-   apparaître en opacité depuis un calque dédié. */
-.stack-slab::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, color-mix(in oklab, var(--t-accent), transparent 86%), transparent 68%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-}
-
-.stack-slab.is-active::before {
-  opacity: 1;
-}
-
-/* Anneau creux : c'est la balle qui vient lui servir de pastille */
-.stack-node {
-  position: absolute;
-  left: 1.5rem;
-  top: 0.95rem;
-  width: 1.5rem;
-  height: 1.5rem;
+/* Disponibilité : un point qui respire doucement */
+.availability-dot {
+  width: 0.45rem;
+  height: 0.45rem;
   border-radius: 9999px;
-  border: 2px solid color-mix(in oklab, var(--t-accent), transparent 65%);
-  transition: top 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease, box-shadow 0.5s ease;
+  background: #22a06b;
+  animation: breathe 2.6s ease-in-out infinite;
 }
 
-.stack-slab.is-active .stack-node {
-  top: 1.75rem;
-  border-color: var(--t-accent);
-  box-shadow: 0 0 0 7px color-mix(in oklab, var(--t-accent), transparent 90%);
-}
-
-.stack-num {
-  opacity: 0.55;
-  transition: opacity 0.45s ease, letter-spacing 0.45s ease;
-}
-
-.stack-slab.is-active .stack-num {
-  opacity: 1;
-  letter-spacing: 0.42em;
-}
-
-/* Le titre grandit avec sa carte : c'est lui qui porte le changement d'échelle */
-.stack-title {
-  font-size: 1.05rem;
-  line-height: 1.35;
-  opacity: 0.6;
-  transition: font-size 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
-}
-
-.stack-caption {
-  opacity: 0.6;
-  transition: opacity 0.5s ease;
-}
-
-.stack-slab.is-active .stack-title,
-.stack-slab.is-active .stack-caption {
-  opacity: 1;
-}
-
-.stack-slab.is-active .stack-title {
-  font-size: 1.6rem;
-}
-
-/* Accordéon : 0fr → 1fr anime une hauteur automatique sans la mesurer en JS */
-.stack-body {
-  display: grid;
-  grid-template-rows: 0fr;
-  margin-top: 0;
-  opacity: 0;
-  transition:
-    grid-template-rows 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    margin-top 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.4s ease;
-}
-
-.stack-body > div {
-  overflow: hidden;
-}
-
-.stack-slab.is-active .stack-body {
-  grid-template-rows: 1fr;
-  margin-top: 1.15rem;
-  opacity: 1;
-}
-
-/* Pastilles en filigrane d'accent : pas d'ombre portée, elle posait une flaque
-   sombre derrière chaque pilule. */
-.stack-chip {
-  background: color-mix(in oklab, var(--t-accent), transparent 92%);
-  border: 1px solid color-mix(in oklab, var(--t-accent), transparent 78%);
-  opacity: 0;
-  transform: translateY(10px);
-  transition:
-    opacity 0.4s ease,
-    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    background-color 0.3s ease;
-}
-
-.stack-slab.is-active .stack-chip {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: calc(var(--i, 0) * 55ms);
-}
-
-.stack-chip:hover {
-  background: color-mix(in oklab, var(--t-accent), transparent 85%);
-}
-
-/* Position et écrasement calculés image par image dans Competences.jsx */
-.stack-ball {
-  position: absolute;
-  z-index: 2;
-  left: 0;
-  top: 0;
-  width: 12px;
-  height: 12px;
-  border-radius: 9999px;
-  background: var(--t-accent);
-  box-shadow: 0 0 10px 3px color-mix(in oklab, var(--t-accent), transparent 62%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease 0.65s;
-}
-
-.is-revealed .stack-ball {
-  opacity: 1;
+@keyframes breathe {
+  50% { opacity: 0.35; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stack-slab,
-  .stack-node,
-  .stack-title,
-  .stack-chip,
-  .stack-slab.is-active .stack-chip {
+  .anim-fade-up,
+  .hero-range svg,
+  .availability-dot {
+    animation: none;
+  }
+
+  [data-reveal] {
+    opacity: 1;
     transform: none;
     transition: none;
   }
 
-  .is-revealed .stack-slab { animation: none; }
-  .stack-slab { opacity: 1; }
-  .stack-chip { opacity: 1; }
+  .card:hover { translate: none; }
+
+  .hero-range .is-back { transform: none; }
 }
 
 /* Impression : on ne garde que le document */
@@ -364,8 +163,6 @@
     color: #000 !important;
   }
 
-  #bg-canvas,
-  #bg-glow,
   .no-print {
     display: none !important;
   }

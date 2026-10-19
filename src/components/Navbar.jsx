@@ -1,73 +1,84 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
+import { WAYPOINTS, readRoute } from '../itinerary';
+import { subscribeScroll } from '../scroll';
+
+// Les étapes après le départ, puis le CV qui est une page à part
+const navLinks = [
+  ...WAYPOINTS.slice(1).map(({ id, name }) => ({ id, name, href: `#${id}` })),
+  { id: 'cv', name: 'CV', href: '#/cv' },
+];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [current, setCurrent] = useState(-1);
+
+  useEffect(() => subscribeScroll(() => {
+    const route = readRoute();
+    if (route) setCurrent(route.index);
+  }), []);
+
+  const currentId = WAYPOINTS[current]?.id;
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset';
   }, [isOpen]);
-
-  const navLinks = [
-    { name: 'À propos', href: '#a-propos' },
-    { name: 'Expérience', href: '#experience' },
-    { name: 'Formation', href: '#education' },
-    { name: 'Démos', href: '#demos' },
-    { name: 'Contact', href: '#contact' },
-    { name: 'CV', href: '#/cv' },
-  ];
 
   return (
     <>
-      {/* VERSION DESKTOP : La bulle flottante (cachée sur mobile) */}
-      <nav className="hidden md:flex fixed top-8 left-1/2 -translate-x-1/2 items-center surface-raised backdrop-blur-xl border border-line rounded-[40px] py-2 px-4 gap-1 z-[100] whitespace-nowrap">
-        {navLinks.map((link) => (
-          <a key={link.name} href={link.href} className="text-body no-underline text-sm py-2 px-4 rounded-[20px] transition-colors duration-300 hover:bg-accent/10 hover:text-accent">
-            {link.name}
-          </a>
-        ))}
-        <span className="mx-1 h-5 w-px bg-line" aria-hidden="true" />
-        <ThemeToggle className="h-9 w-9 hover:bg-accent/10" />
-      </nav>
+      <header className="fixed inset-x-0 top-0 z-[100] bg-page/80 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-[1120px] items-center justify-between px-6 sm:px-10">
+          <a href="#a-propos" className="text-sm font-medium text-ink no-underline">Raphaël Dubost</a>
 
-      {/* VERSION MOBILE : Bouton Hamburger + bascule de thème (cachés sur Desktop) */}
-      <div className="md:hidden fixed top-4 right-4 z-[101] flex items-center gap-2">
-        <ThemeToggle className="h-11 w-11 surface-raised backdrop-blur-xl border border-line" />
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-3 surface-raised backdrop-blur-xl border border-line rounded-full text-ink transition-transform active:scale-95"
-          aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-        >
-          {isOpen ? <X size={24} className="text-accent" /> : <Menu size={24} />}
-        </button>
-      </div>
+          <nav className="hidden items-center gap-7 md:flex">
+            {navLinks.map((link) => (
+              <a
+                key={link.id}
+                href={link.href}
+                aria-current={link.id === currentId ? 'location' : undefined}
+                className={`text-sm no-underline transition-colors duration-300 hover:text-ink ${
+                  link.id === currentId ? 'text-ink' : 'text-muted'
+                }`}
+              >
+                {link.name}
+              </a>
+            ))}
+            <ThemeToggle className="-mr-2 h-9 w-9" />
+          </nav>
+
+          <div className="flex items-center gap-1 md:hidden">
+            <ThemeToggle className="h-10 w-10" />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="grid h-10 w-10 place-items-center text-ink"
+              aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+            >
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+      </header>
 
       {/* VERSION MOBILE : Menu plein écran (Overlay) */}
       <div
-        className={`md:hidden fixed inset-0 z-[100] bg-page/95 backdrop-blur-xl transition-all duration-500 ease-in-out flex flex-col items-center justify-center ${
+        className={`md:hidden fixed inset-0 top-16 z-[99] bg-page transition-opacity duration-300 ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
-        <div className="flex flex-col items-center gap-8">
+        <nav className="flex flex-col gap-6 px-6 pt-10">
           {navLinks.map((link) => (
             <a
-              key={link.name}
+              key={link.id}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className={`font-display text-3xl text-ink transition-all duration-300 hover:text-accent ${
-                isOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-              }`}
-              style={{ transitionDelay: `${isOpen ? '100ms' : '0ms'}` }}
+              aria-current={link.id === currentId ? 'location' : undefined}
+              className={`text-3xl font-medium tracking-[-0.02em] no-underline ${link.id === currentId ? 'text-ink' : 'text-muted'}`}
             >
               {link.name}
             </a>
           ))}
-        </div>
+        </nav>
       </div>
     </>
   );
